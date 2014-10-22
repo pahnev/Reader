@@ -649,18 +649,14 @@
 			NSNumber *key = [NSNumber numberWithInteger:currentPage]; // Page number key
 
 			ReaderContentView *targetView = [contentViews objectForKey:key]; // View
-
-			switch (recognizer.numberOfTouchesRequired) // Touches count
-			{
-				case 1: // One finger double tap: zoom++
-				{
-					[targetView zoomIncrement:recognizer]; break;
-				}
-
-				case 2: // Two finger double tap: zoom--
-				{
-					[targetView zoomDecrement:recognizer]; break;
-				}
+			
+			//If we're zoomed in at all, a double tap returns us to 100%
+			//(aka minimumZoomScale - the scale that shows the whole page)
+			//Otherwise it zooms in by the standard increment.
+			if (targetView.zoomScale > targetView.minimumZoomScale) {
+				[targetView setZoomScale:targetView.minimumZoomScale animated:YES];
+			} else {
+				[targetView zoomIncrement:recognizer];
 			}
 
 			return;
