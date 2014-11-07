@@ -79,8 +79,13 @@
 
 		UIFont *doneButtonFont = [UIFont systemFontOfSize:BUTTON_FONT_SIZE];
 		NSString *doneButtonText = NSLocalizedString(@"Done", @"button");
-		CGSize doneButtonSize = [doneButtonText sizeWithFont:doneButtonFont];
-		CGFloat doneButtonWidth = (doneButtonSize.width + TEXT_BUTTON_PADDING);
+//		CGSize doneButtonSize = [doneButtonText sizeWithFont:doneButtonFont]; // IOS 7 deprecation
+//		CGFloat doneButtonWidth = (doneButtonSize.width + TEXT_BUTTON_PADDING); // IOS 7 deprecation
+        
+        NSMutableParagraphStyle *pg = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        pg.lineBreakMode = NSLineBreakByWordWrapping;
+        CGRect doneButtonSize = [doneButtonText boundingRectWithSize:CGSizeMake(500.0f, 500.0f) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName: doneButtonFont, NSParagraphStyleAttributeName: pg } context:nil];
+        CGFloat doneButtonWidth = (doneButtonSize.size.width + TEXT_BUTTON_PADDING);
 
 		UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
 		doneButton.frame = CGRectMake(leftButtonX, BUTTON_Y, doneButtonWidth, BUTTON_HEIGHT);
@@ -112,7 +117,7 @@
 		showControl.frame = CGRectMake(showControlX, BUTTON_Y, SHOW_CONTROL_WIDTH, BUTTON_HEIGHT);
 		showControl.tintColor = (useTint ? [UIColor blackColor] : [UIColor colorWithWhite:0.8f alpha:1.0f]);
 		showControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-		showControl.segmentedControlStyle = UISegmentedControlStyleBar;
+//		showControl.segmentedControlStyle = UISegmentedControlStyleBar; // IOS 7 deprecation
 		showControl.selectedSegmentIndex = 0; // Default segment index
 		//showControl.backgroundColor = [UIColor grayColor];
 		showControl.exclusiveTouch = YES;
